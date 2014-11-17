@@ -1,0 +1,127 @@
+---
+- name: Development stack
+  hosts: local
+  sudo: yes
+
+  vars:
+
+    cpu_arch: x86_64
+    vagrant_version: 1.6.5
+    user: juan
+
+  tasks:
+
+    # @todo convert script to playbook
+    #- name: install vbox + vagrant + ansible
+    #  shell: curl -s https://gist.githubusercontent.com/varas/162c6599a283be5d8713/raw/c791165828fcc18442c47cd88fcb19de81d88cc4/ansible-vagrant-install.sh | sh
+    #  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    #  tags: [ initial ]
+
+    - name: Ubuntu multiverse repo
+      apt_repository: repo="{{item}}" update_cache="no"
+      with_items:
+        - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+        - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+        - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+        - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+      notify: update apt cache
+
+    - name: Tools
+      apt: name="{{item}}" update_cache="no"
+      with_items:
+        - curl
+        - htop
+        - git
+        - zsh
+        - tmux
+        - vim
+        - exuberant-ctags
+        - python
+        - python-pip
+        - python-dev
+        - ruby
+        - ruby-dev
+        - build-essential
+        - ansible
+        - virtualbox-guest-utils
+        - virtualbox-guest-dkms
+        - virtualbox
+        - vagrant
+
+    - name: Backing up existing ~/.zshrc
+      shell: if [ -f ~/.zshrc ]; then mv ~/.zshrc{,.orig}; fi
+
+    - name: Installing oh-my-zsh (https://github.com/robbyrussell/oh-my-zsh)
+      git: repo=https://github.com/robbyrussell/oh-my-zsh dest=~/.oh-my-zsh
+
+    - name: Creating new ~/.zshrc
+      shell: cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+
+    - name: Installing spf13-vim, The Ultimate Vim Distribution (http://vim.spf13.com)
+      shell: curl http://j.mp/spf13-vim3 -L -o - | sh
+
+    - name: shell
+      user: shell=/bin/zsh user={{ user }}
+
+    #
+    # vagrant manual install
+    #
+
+    #- name: download vagrant
+    #  get: name="https://dl.bintray.com/mitchellh/vagrant/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb -O /tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb" dest="/tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb"
+
+    #- name: install vagrant
+    #  shell: dpkg -i /tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb
+
+    #- name: remove vagrant installer
+    #  shell: rm -f /tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb
+
+    # obsolete plugin, use global-status instead
+    #- name: plugin - vagrant list
+    #  shell: vagrant plugin install vagrant-list
+
+    - name: dotfiles folder
+      file: path="~/dotfiles" state="directory"
+
+    - name: Solarize term
+      git: >
+        repo=https://github.com/sigurdga/gnome-terminal-colors-solarized.git
+        dest=~/dotfiles/solarized
+
+    - name: Get fonts
+      git: >
+        repo=https://github.com/Lokaltog/powerline-fonts.git
+        dest=~/.fonts
+
+    - name: Install fonts
+      shell: fc-cache -vf ~/.fonts/*/*.ttf
+
+    - name: oh-my-zsh theme
+      lineinfile: dest=~/.zshrc line='ZSH_THEME=agnoster'
+
+    - name: oh-my-zsh default user
+      lineinfile: dest=~/.zshrc line='DEFAULT_USER={{ user }}'
+
+    - name: Install z
+      git: >
+        repo=https://github.com/rupa/z.git
+        dest=~/dotfiles/z
+
+    - name: Load z
+      lineinfile: dest=~/.zshrc line='. ~/dotfiles/z/z.sh'
+
+
+    #
+    # vim
+    #
+
+    # http://blog.joncairns.com/2012/05/using-vim-as-a-php-ide/
+
+
+  handlers:
+
+    - name: update apt cache
+      apt: update_cache="yes"
+
+    #- name: vim plugins
+    #  shell: vim +BundleInstall +qall
