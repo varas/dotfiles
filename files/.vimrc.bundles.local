@@ -1,0 +1,4 @@
+Bundle 'joonty/vdebug'
+Bundle 'joonty/vim-phpqa'
+Bundle 'c0r73x/vimdir.vim'
+"Bundle 'gorkunov/smartpairs'

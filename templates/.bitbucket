@@ -1,0 +1,7 @@
+[auth]
+username = {{ bitbucket_user }}
+password = {{ bitbucket_password }}
+
+[options]
+scm = git
+protocol = ssh
