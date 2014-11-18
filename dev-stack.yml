@@ -83,14 +83,6 @@
         - backup zshrc
         - create zshrc
 
-    - name: Check if spf13 is installed
-      stat: path="{{ dotfiles_path }}/.spf13-vim-3/"
-      register: spf_dir
-
-    - name: Installing spf13-vim, The Ultimate Vim Distribution (http://vim.spf13.com)
-      shell: curl http://j.mp/spf13-vim3 -L -o - | sh
-      when: spf_dir.stat.isdir is not defined
-
     - name: default shell
       user: shell=/bin/zsh user={{ user }}
       when: user != "root"
@@ -171,6 +163,14 @@
     #
 
     # http://blog.joncairns.com/2012/05/using-vim-as-a-php-ide/
+
+    - name: Check if spf13 is installed
+      stat: path="{{ dotfiles_path }}/.spf13-vim-3/"
+      register: spf_dir
+
+    - name: Installing spf13-vim, The Ultimate Vim Distribution (http://vim.spf13.com)
+      shell: curl http://j.mp/spf13-vim3 -L -o - | sh
+      when: spf_dir.stat.isdir is not defined
 
     - name: custom vimrc
       copy: src=files/.vimrc.local dest={{ user_path }}/.vimrc.local
