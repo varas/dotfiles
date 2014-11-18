@@ -33,6 +33,10 @@
 
   tasks:
 
+    #
+    # Repos
+    #
+
     - name: Ubuntu multiverse repo
       apt_repository: repo="{{item}}" update_cache="no"
       with_items:
@@ -41,6 +45,14 @@
         - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
         - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
       notify: update apt cache
+
+    - name: Node.js | Add the node.js PPA
+      apt_repository: repo=ppa:chris-lea/node.js
+      tags: nodejs
+
+    #
+    # Tools
+    #
 
     - name: Tools
       apt: name="{{item}}" update_cache="yes"
@@ -188,6 +200,20 @@
     - name: vim php refactor executable
       file: path="{{ dotfiles_path }}/bin/refactor" mode=0775
 
+    #
+    # Node & NPM
+    #
+
+    - name: node link for nodejs exec (solves grunt error)
+      file: state=link src=/usr/bin/nodejs dest=/usr/bin/node
+      tags: [ npm ]
+
+    - name: npm global packages
+      npm: global=yes name={{ item }}
+      with_items:
+        - grunt-cli
+        - bower
+      tags: [ npm ]
 
 
   handlers:
