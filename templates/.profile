@@ -1,14 +1,10 @@
 # ~/.profile: executed by Bourne-compatible login shells.
 
-if [ "$BASH" ]; then
-  if [ -f ~/.bashrc ]; then
-    . ~/.bashrc
-  fi
-fi
-
+# Disallow write access to your terminal
 mesg n
 
-export PATH=/usr/local/share/npm/bin/:/root/packer/:~/.composer/vendor/bin/:~/dotfiles/bin:$PATH
+export PATH=/usr/local/share/npm/bin/:~/.composer/vendor/bin/:~/dotfiles/bin:$PATH
+# @todo packer path
 
 ### Heroku Toolbelt
 #export PATH="/usr/local/heroku/bin:$PATH"
@@ -99,5 +95,5 @@ function psgrep() { ps axuf | grep -v grep | grep "$@" -i --color=auto; }
 function mcd() { mkdir $1 && cd $1; }
 
 # z (jump around) https://github.com/rupa/z
-. /home/{{user }}/.zeta/z.sh
+. {{ dotfiles_path }}/z/z.sh
 
