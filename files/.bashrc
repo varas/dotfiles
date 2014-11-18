@@ -121,15 +121,9 @@ stty ixoff -ixon
 
 function gi() { curl http://gitignore.io/api/$@ ;}
 
-# scripts propios
-export PATH=$PATH:~/scripts
-
 # history ilimitado
 export HISTFILESIZE=
 export HISTSIZE=
-
-### Added by the Heroku Toolbelt
-#export PATH="/usr/local/heroku/bin:$PATH"
 
 # aws completion
 complete -C aws_completer aws

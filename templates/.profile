@@ -8,7 +8,11 @@ fi
 
 mesg n
 
-export PATH=/usr/local/share/npm/bin/:/root/packer/:~/.composer/vendor/bin/:$PATH
+export PATH=/usr/local/share/npm/bin/:/root/packer/:~/.composer/vendor/bin/:~/dotfiles/bin:$PATH
+
+### Heroku Toolbelt
+#export PATH="/usr/local/heroku/bin:$PATH"
+
 
 # if $(which trash &> /dev/null); then
 #   alias rm='trash'

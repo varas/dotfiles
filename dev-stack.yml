@@ -70,6 +70,10 @@
 
     - name: dotfiles folder
       file: path="{{ dotfiles_path }}" state="directory"
+    
+    - name: dotfiles bin folder
+      file: path="{{ dotfiles_path }}/bin" state="directory"
+
 
     - name: Installing oh-my-zsh (https://github.com/robbyrussell/oh-my-zsh)
       git: >
@@ -130,6 +134,13 @@
     - name: shell - profile load for zsh
       lineinfile: dest={{ zshrc }} line='. {{ dotfiles_path }}/.profile'
 
+    - name: custom bashrc
+      copy: src=files/.bashrc dest={{ user_path }}/.bashrc
+
+    #
+    # Bitucket
+    #
+
     - name: bitbucket cli
       pip: name="bitbucket-cli"
       when: with_bitbucket
@@ -143,7 +154,7 @@
     #
 
     #- name: download vagrant
-    #  get: name="https://dl.bintray.com/mitchellh/vagrant/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb -O /tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb" dest="/tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb"
+    #  get_url: url="https://dl.bintray.com/mitchellh/vagrant/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb" dest="/tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb"
 
     #- name: install vagrant
     #  shell: dpkg -i /tmp/vagrant_{{ vagrant_version }}_{{ cpu_arch }}.deb
@@ -156,13 +167,10 @@
     #  shell: vagrant plugin install vagrant-list
 
     #
-    # vim
+    # Vim
     #
 
     # http://blog.joncairns.com/2012/05/using-vim-as-a-php-ide/
-
-    - name: custom bashrc
-      copy: src=files/.bashrc dest={{ user_path }}/.bashrc
 
     - name: custom vimrc
       copy: src=files/.vimrc.local dest={{ user_path }}/.vimrc.local
@@ -170,6 +178,12 @@
     - name: custom vim bundles
       copy: src=files/.vimrc.bundles.local dest={{ user_path }}/.vimrc.bundles.local
       notify: install vim plugins
+
+    - name: vim php refactor
+      get_url: url="https://github.com/QafooLabs/php-refactoring-browser/releases/download/v0.0.4/refactor.phar" dest="{{ dotfiles_path }}/bin/refactor"
+
+    - name: vim php refactor executable
+      file: path="{{ dotfiles_path }}/bin/refactor" mode=0775
 
 
 
