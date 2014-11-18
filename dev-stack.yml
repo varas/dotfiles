@@ -28,6 +28,8 @@
   roles:
 
     - { role: geerlingguy.php-xdebug }
+    #- { role: geerlingguy.packer-debian }
+    - { role: kosssi.composer }
 
   tasks:
 
@@ -43,11 +45,12 @@
     - name: Tools
       apt: name="{{item}}" update_cache="yes"
       with_items:
+        - build-essential
         - curl
         - htop
+        - tmux
         - git
         - zsh
-        - tmux
         - vim
         - exuberant-ctags
         - python
@@ -55,13 +58,14 @@
         - python-dev
         - ruby
         - ruby-dev
-        - build-essential
         - ansible
         - virtualbox-guest-utils
         - virtualbox-guest-dkms
         - virtualbox
         - vagrant
         - php5
+        - nodejs
+        - npm
 
     - name: Timestamp for backup file naming
       shell: date '+%Y_%m_%d_%H%M'
