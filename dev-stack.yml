@@ -133,6 +133,17 @@
     - name: Load z
       lineinfile: dest={{ zshrc }} line='. {{ dotfiles_path }}/z/z.sh'
 
+    - name: FZF clone
+      git: >
+        repo=https://github.com/junegunn/fzf.git
+        dest={{ user_path }}/.fzf
+    # needs to be placed on ~/.fzf
+      tags: [ fuzzy ]
+
+    - name: FZF install
+      shell: yes | {{ user_path }}/.fzf/install
+      tags: [ fuzzy ]
+
     - name: shell - profile template
       template: src="templates/.profile" dest="{{ dotfiles_path }}/.profile"
 
@@ -144,6 +155,7 @@
 
     - name: shell - profile load for bash
       lineinfile: dest={{ bashrc }} line='. {{ dotfiles_path }}/.profile'
+
     #
     # Bitucket
     #
