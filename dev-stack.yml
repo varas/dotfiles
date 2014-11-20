@@ -156,6 +156,9 @@
     - name: shell - profile load for bash
       lineinfile: dest={{ bashrc }} line='. {{ dotfiles_path }}/.profile'
 
+    - name: ansible shell
+      pip: name=ansible-shell
+      tags: [ ansible ]
     #
     # Bitucket
     #
