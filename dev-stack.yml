@@ -1,13 +1,14 @@
 ---
 - name: Development stack
-  hosts: all
+  hosts: localhost
   sudo: yes
+  sudo_user: root
+  #sudo_ask_pass: True
 
   vars:
 
-    user: root
-    #user_path: "/home/{{ user }}"
-    user_path: "/root"
+    user: changeme
+    user_path: "/home/{{ user }}"
     dotfiles_path: "{{ user_path }}/dotfiles"
     bashrc: "{{ user_path }}/.bashrc"
     zshrc: "{{ user_path }}/.zshrc"
@@ -37,18 +38,18 @@
     # Repos
     #
 
-    - name: Ubuntu multiverse repo
-      apt_repository: repo="{{item}}" update_cache="no"
-      with_items:
-        - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
-        - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
-        - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
-        - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
-      notify: update apt cache
+    #- name: Ubuntu multiverse repo
+    #  apt_repository: repo="{{item}}" update_cache="no"
+    #  with_items:
+    #    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    #    - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    #    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+    #    - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+    #  notify: update apt cache
 
-    - name: Node.js | Add the node.js PPA
-      apt_repository: repo=ppa:chris-lea/node.js
-      tags: nodejs
+    #- name: Node.js | Add the node.js PPA
+    #  apt_repository: repo=ppa:chris-lea/node.js
+    #  tags: nodejs
 
     #
     # Tools
@@ -70,14 +71,16 @@
         - python-dev
         - ruby
         - ruby-dev
-        - ansible
         - virtualbox-guest-utils
         - virtualbox-guest-dkms
         - virtualbox
         - vagrant
         - php5
+        - php-intl
         - nodejs
         - npm
+        # GUI
+        - mysql-workbench
 
     - name: Timestamp for backup file naming
       shell: date '+%Y_%m_%d_%H%M'
@@ -118,6 +121,9 @@
     - name: Install fonts
       shell: fc-cache -vf {{ dotfiles_path }}/.fonts/*/*.ttf
       when: with_fonts and fonts_clone.changed
+
+    - name: create zshrc
+      shell: cp {{ dotfiles_path }}/.oh-my-zsh/templates/zshrc.zsh-template {{ zshrc }}
 
     - name: oh-my-zsh theme
       lineinfile: dest={{ zshrc }} line='ZSH_THEME=agnoster'
