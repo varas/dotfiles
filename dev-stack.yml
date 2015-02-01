@@ -3,7 +3,6 @@
   hosts: localhost
   sudo: yes
   sudo_user: root
-  #sudo_ask_pass: True
 
   vars:
 
@@ -57,6 +56,7 @@
 
     - name: Tools
       apt: name="{{item}}" update_cache="yes"
+      tags: [ tools ]
       with_items:
         - build-essential
         - curl
@@ -75,6 +75,7 @@
         - virtualbox-guest-dkms
         - virtualbox
         - vagrant
+        - docker.io
         - php5
         - php5-intl
         - nodejs
