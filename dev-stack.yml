@@ -76,11 +76,11 @@
         - virtualbox
         - vagrant
         - php5
-        - php-intl
+        - php5-intl
         - nodejs
         - npm
         # GUI
-        - mysql-workbench
+        #- mysql-workbench
 
     - name: Timestamp for backup file naming
       shell: date '+%Y_%m_%d_%H%M'
