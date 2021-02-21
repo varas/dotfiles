@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  tasks:
+
+    - name: Install VIM
+      apt: pkg=vim state=present
+      sudo: yes
+
+    - name: Solarize term
+      git: >
+        repo=https://github.com/sigurdga/gnome-terminal-colors-solarized.git
+        dest=~/dotfiles/solarized
+
+    - name: Get fonts
+      git: >
+        repo=https://github.com/Lokaltog/powerline-fonts.git
+        dest=~/.fonts
+
+    - name: Install fonts
+      shell: fc-cache -vf ~/.fonts/*/*.ttf
+
+    - name: Install oh-my-zsh
+      git: >
+        repo=https://github.com/robbyrussell/oh-my-zsh.git
+        dest=~/.oh-my-zsh
+
+    - name: oh-my-zsh theme
+      lineinfile: dest=~/.zshrc line='ZSH_THEME=kardan.juan'
+
+#    - name: oh-my-zsh default user
+#      lineinfile: dest=~/.zshrc line='DEFAULT_USER=juan'
+
+    - name: Install z
+      git: >
+        repo=https://github.com/rupa/z.git
+        dest=~/dotfiles/z
+
+    - name: Load z
+      lineinfile: dest=~/.zshrc line='. ~/dotfiles/z/z.sh'
+
+    - name: Create .vimrc symlink
+      file: >
+        src=~/dotfiles/vim/vimrc
+        dest=~/.vimrc
+        state=link
+
+    - name: Create .bashrc symlink
+      file: >
+        src=~/dotfiles/bash/bashrc
+        dest=~/.bashrc
+        state=link
+
