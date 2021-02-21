@@ -1,3 +1,0 @@
-set nofoldenable                " disable code folding
-let g:DisableAutoPHPFolding = 1 " disable PIV's folding
-let g:php_refactor_command="/var/www/historico2/juan/scripts/refactor.phar"
