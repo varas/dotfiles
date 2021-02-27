@@ -139,7 +139,7 @@ lesscolor() {  ccze -A < $1 |less -R }
 yamlvalidation() { python -c 'import yaml,sys;yaml.safe_load(sys.stdin)' < $1 }
 
 sshjenkins() {
-    ssh -i /Users/jhernandez/.ssh/jenkins/id_rsa_jenkins jenkins@$1 $2 $3 $4 $5
+    ssh -i ~/.ssh/jenkins/id_rsa_jenkins jenkins@$1 $2 $3 $4 $5
 }
 
 # Bitbucket
