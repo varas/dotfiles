@@ -221,5 +221,5 @@ gol() {
     gofmt -w -s $1 ; goimports -w $1
 }
 
-source ~/.profile.nr
+source ~/.profile.*
 

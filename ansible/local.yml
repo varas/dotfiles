@@ -1,52 +1,60 @@
 ---
 - hosts: localhost
+
+  vars:
+    username:      juan
+    repos_path:    ~/go/src
+    dotfiles_path: {{ repos_path }}/github.com/varas/dotfiles
+
   tasks:
 
-    - name: Install VIM
-      apt: pkg=vim state=present
-      sudo: yes
-
     - name: Solarize term
-      git: >
-        repo=https://github.com/sigurdga/gnome-terminal-colors-solarized.git
-        dest=~/dotfiles/solarized
+      git:
+        repo: https://github.com/sigurdga/gnome-terminal-colors-solarized.git
+        dest: {{ dotfiles_path }}/solarized
 
     - name: Get fonts
-      git: >
-        repo=https://github.com/Lokaltog/powerline-fonts.git
-        dest=~/.fonts
+      git:
+        repo: https://github.com/Lokaltog/powerline-fonts.git
+        dest: {{ dotfiles_path }}/fonts
 
     - name: Install fonts
-      shell: fc-cache -vf ~/.fonts/*/*.ttf
+      shell: fc-cache -vf {{ dotfiles_path }}/fonts/*/*.ttf
 
     - name: Install oh-my-zsh
-      git: >
-        repo=https://github.com/robbyrussell/oh-my-zsh.git
-        dest=~/.oh-my-zsh
+      git:
+        repo: https://github.com/robbyrussell/oh-my-zsh.git
+        dest: ~/.oh-my-zsh
 
-    - name: oh-my-zsh theme
+    - name: zsh theme
       lineinfile: dest=~/.zshrc line='ZSH_THEME=kardan.juan'
 
-#    - name: oh-my-zsh default user
-#      lineinfile: dest=~/.zshrc line='DEFAULT_USER=juan'
+    - name: oh-my-zsh default user
+      lineinfile: dest=~/.zshrc line='DEFAULT_USER={{ username }}'
 
     - name: Install z
-      git: >
-        repo=https://github.com/rupa/z.git
-        dest=~/dotfiles/z
+      git:
+        repo: https://github.com/rupa/z.git
+        dest: {{ dotfiles_path }}/z
 
     - name: Load z
-      lineinfile: dest=~/.zshrc line='. ~/dotfiles/z/z.sh'
+      lineinfile: dest=~/.zshrc line='. {{ dotfiles_path }}/z/z.sh'
 
     - name: Create .vimrc symlink
-      file: >
-        src=~/dotfiles/vim/vimrc
-        dest=~/.vimrc
-        state=link
+      file:
+        src: {{ dotfiles_path }}/vim/vimrc
+        dest: ~/.vimrc
+        state: link
 
-    - name: Create .bashrc symlink
-      file: >
-        src=~/dotfiles/bash/bashrc
-        dest=~/.bashrc
-        state=link
+#    - name: Create .bashrc symlink
+#      file:
+#        src: {{ dotfiles_path }}/bash/bashrc
+#        dest: ~/.bashrc
+#        state: link
+
+    - name: Create .profile symlink
+      file:
+        src: {{ dotfiles_path }}/files/.profile
+        dest: ~/.profile
+        state: link
 
