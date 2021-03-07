@@ -223,5 +223,18 @@ gol() {
     gofmt -w -s $1 ; goimports -w $1
 }
 
+# OBS text stream
+obsStreamFile="~/Desktop/obs.txt"
+zz() {
+  echo "${@}"  > $obsStreamFile
+}
+za() {
+  echo "${@}" >> $obsStreamFile
+}
+zc() {
+  echo ""      > $obsStreamFile
+}
+
+# Extra sources
 source ~/.profile.*
 
