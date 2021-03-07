@@ -9,6 +9,7 @@ export LANG=en_US.UTF-8
 # Path
 export GOPATH=$HOME/go
 export PATH=/usr/local/sbin:~/dotfiles/bin:$GOPATH/bin:$PATH
+export GHPATH=$HOME/go/src/github.com/
 # jenv
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
@@ -37,6 +38,7 @@ alias ..='cd ..'
 alias cdg="while true; do [ ! -d .git ] && cd .. || break; done"
 alias cdt="cd \$(mktemp -d)"
 alias gti="git"
+alias cdg="cd $GHPATH"
 #alias git=hub # requires hub
 alias sort=gsort
 alias sed=gsed
