@@ -239,9 +239,6 @@ zz() {
 za() {
   echo "${@}" >> $obsStreamFile
 }
-zc() {
-  echo ""      > $obsStreamFile
-}
 
 # Extra sources
 source ~/.profile.*
