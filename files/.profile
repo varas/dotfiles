@@ -219,6 +219,14 @@ dbash() {
 	docker exec -ti $1 /bin/bash
 }
 
+ghdelrelease() {
+  if [ "$1" != "" ]; then
+    gh release delete -y $1
+    git tag -d $1
+    git push origin :refs/tags/$1
+  fi
+}
+
 gol() {
     gofmt -w -s $1 ; goimports -w $1
 }
